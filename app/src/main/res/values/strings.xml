@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">StoryApp</string>
+
+    <string name="image_contentDescription">image</string>
+    <string name="let_s_get_started_text">Let\'s Get started</string>
+    <string name="intro_text_description">Welcome to Our Story App! Explore and enjoy a variety of captivating stories from different users here.</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="title_login">Sudah siap untuk berbagi kisah?</string>
+    <string name="message_login">Masukkan data dirimu</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="name">Nama</string>
+    <string name="message_sign_up">Masukkan data diri Anda!</string>
+    <string name="hint_name">Masukkan nama lengkap anda..</string>
+    <string name="email_error_validation">Invalid email format</string>
+    <string name="password_error_validation">Password must be at least 8 characters</string>
+    <string name="field_error_null">Field must be filled</string>
+
+
 </resources>
