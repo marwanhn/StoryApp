@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">StoryApp</string>
 
+    <string name="sign_up_bar">Sign Up</string>
+
     <string name="image_contentDescription">image</string>
     <string name="let_s_get_started_text">Let\'s Get started</string>
     <string name="intro_text_description">Welcome to Our Story App! Explore and enjoy a variety of captivating stories from different users here.</string>
@@ -16,6 +18,18 @@
     <string name="email_error_validation">Invalid email format</string>
     <string name="password_error_validation">Password must be at least 8 characters</string>
     <string name="field_error_null">Field must be filled</string>
+    <string name="deskripsi">Deskripsi</string>
+    <string name="namaUser">Dicoding</string>
+    <string name="title_detail">Detail Story</string>
+    <string name="title_main">Story App\n</string>
+    <string name="take_a_picture">TAKE A PICTURE</string>
+    <string name="gallery">GALLERY</string>
+    <string name="upload">UPLOAD</string>
+    <string name="description">description</string>
+    <string name="title_upload_story">Upload Story</string>
+    <string name="upload_story">Upload Story</string>
+    <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
+    <string name="empty_description_warning">Harap isi deskripsi terlebih dahulu</string>
 
 
 </resources>

@@ -10,21 +10,27 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.EditText
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import com.example.storyapp.MainActivity
-import com.example.storyapp.R
+import com.example.storyapp.data.pref.UserModel
+import com.example.storyapp.view.main.MainActivity
 import com.example.storyapp.databinding.ActivityLoginBinding
+import com.example.storyapp.utils.ViewModelFactory
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var factory: ViewModelFactory
+    private val loginViewModel: LoginViewModel by viewModels { factory }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupView()
-        setupAction()
+        setupViewModel()
         playAnimation()
+        setupAction()
     }
 
     private fun setupView() {
@@ -40,6 +46,10 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
+    private fun setupViewModel() {
+        factory = ViewModelFactory.getInstance(this)
+    }
+
     private fun setupAction() {
         binding.btnSignIn.setOnClickListener {
             val email = binding.edtEmailText.text.toString()
@@ -52,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
                     create()
                     show()
                 }
-            } else if(hasValidationError()) {
+            } else if (hasValidationError()) {
                 // Validasi jika EditText masih memiliki Error
                 AlertDialog.Builder(this).apply {
                     setTitle("Error")
@@ -63,17 +73,25 @@ class LoginActivity : AppCompatActivity() {
                 }
             } else {
                 // Semua EditText sudah diisi, lanjutkan ke aktivitas selanjutnya
-                AlertDialog.Builder(this).apply {
-                    setTitle("Yeah!")
-                    setMessage("Anda telah login dengan email: $email.")
-                    setPositiveButton("Lanjut") { _, _ ->
-                        val intent = Intent(context, MainActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(intent)
-                        finish()
+                showLoading()
+                postText()
+                showAlert()
+                loginViewModel.login()
+                loginViewModel.loginResponse.observe(this@LoginActivity) { response ->
+                    if (!response.error) {
+                        AlertDialog.Builder(this).apply {
+                            setTitle("Berhasil")
+                            setMessage("Anda telah login dengan $email, Silakan klik lanjut")
+                            setPositiveButton("Lanjut") { _, _ ->
+                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                                startActivity(intent)
+                                loginViewModel.loginResponse.value?.error = false
+                                finish()
+                            }
+                            create()
+                            show()
+                        }
                     }
-                    create()
-                    show()
                 }
             }
 
@@ -88,11 +106,14 @@ class LoginActivity : AppCompatActivity() {
         }.start()
 
         val title = ObjectAnimator.ofFloat(binding.tvTitleLogin, View.ALPHA, 1f).setDuration(500)
-        val message = ObjectAnimator.ofFloat(binding.tvMessageLogin, View.ALPHA,1f).setDuration(500)
+        val message =
+            ObjectAnimator.ofFloat(binding.tvMessageLogin, View.ALPHA, 1f).setDuration(500)
         val email = ObjectAnimator.ofFloat(binding.tvEmail, View.ALPHA, 1f).setDuration(500)
-        val emailBox = ObjectAnimator.ofFloat(binding.edtEmailLayout, View.ALPHA,1f).setDuration(500)
-        val password = ObjectAnimator.ofFloat(binding.tvPassword, View.ALPHA,1f).setDuration(500)
-        val passwordBox = ObjectAnimator.ofFloat(binding.edtPasswordLayout, View.ALPHA,1f).setDuration(500)
+        val emailBox =
+            ObjectAnimator.ofFloat(binding.edtEmailLayout, View.ALPHA, 1f).setDuration(500)
+        val password = ObjectAnimator.ofFloat(binding.tvPassword, View.ALPHA, 1f).setDuration(500)
+        val passwordBox =
+            ObjectAnimator.ofFloat(binding.edtPasswordLayout, View.ALPHA, 1f).setDuration(500)
         val signin = ObjectAnimator.ofFloat(binding.btnSignIn, View.ALPHA, 1f).setDuration(500)
 
 
@@ -102,8 +123,54 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun showLoading() {
+        loginViewModel.isLoading.observe(this@LoginActivity) {
+            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun showAlert(){
+        loginViewModel.toastText.observe(this@LoginActivity) {
+            AlertDialog.Builder(this).apply {
+                setTitle("Error")
+                setMessage("User not found")
+                setPositiveButton("OK", null)
+                create()
+                show()
+            }
+        }
+
+    }
+
+    private fun postText() {
+        binding.apply {
+            loginViewModel.getLogin(
+                edtEmailText.text.toString(),
+                edtPasswordText.text.toString()
+            )
+        }
+
+        loginViewModel.loginResponse.observe(this@LoginActivity) { response ->
+                saveSession(
+                    UserModel(
+                        response.loginResult?.name.toString(),
+                        AUTH_KEY + (response.loginResult?.token.toString()),
+                        true,
+                    )
+                )
+        }
+    }
+
+    private fun saveSession(user: UserModel) {
+        loginViewModel.saveSession(user)
+    }
+
     private fun isEditTextEmpty(editText: EditText): Boolean {
         return editText.text.toString().trim().isEmpty()
+    }
+
+    companion object {
+        private const val AUTH_KEY = "Bearer "
     }
 
     private fun hasValidationError(): Boolean {
