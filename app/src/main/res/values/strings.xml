@@ -3,33 +3,35 @@
 
     <string name="sign_up_bar">Sign Up</string>
 
-    <string name="image_contentDescription">image</string>
+    <string name="image_contentDescription">Image</string>
     <string name="let_s_get_started_text">Let\'s Get started</string>
     <string name="intro_text_description">Welcome to Our Story App! Explore and enjoy a variety of captivating stories from different users here.</string>
     <string name="sign_in">SIGN IN</string>
     <string name="sign_up">SIGN UP</string>
-    <string name="title_login">Sudah siap untuk berbagi kisah?</string>
-    <string name="message_login">Masukkan data dirimu</string>
-    <string name="email">E-mail</string>
-    <string name="password">Password</string>
-    <string name="name">Nama</string>
-    <string name="message_sign_up">Masukkan data diri Anda!</string>
-    <string name="hint_name">Masukkan nama lengkap anda..</string>
-    <string name="email_error_validation">Invalid email format</string>
+    <string name="title_login">Are you ready to share your story?</string>
+    <string name="message_login">Enter your data</string>
+    <string name="email" translatable="false">E-mail</string>
+    <string name="password" translatable="false">Password</string>
+    <string name="name">Name</string>
+    <string name="message_sign_up">Enter your personal data!</string>
+    <string name="hint_name">Enter your full name!</string>
+    <string name="email_error_validation" translatable="false">Invalid email format</string>
     <string name="password_error_validation">Password must be at least 8 characters</string>
-    <string name="field_error_null">Field must be filled</string>
-    <string name="deskripsi">Deskripsi</string>
-    <string name="namaUser">Dicoding</string>
-    <string name="title_detail">Detail Story</string>
-    <string name="title_main">Story App\n</string>
+    <string name="field_error_null" translatable="false">Field must be filled</string>
+    <string name="deskripsi">Description</string>
+    <string name="namaUser" translatable="false">Dicoding</string>
+    <string name="title_detail" translatable="false">Detail Story</string>
+    <string name="title_main" translatable="false">Story App\n</string>
     <string name="take_a_picture">TAKE A PICTURE</string>
     <string name="gallery">GALLERY</string>
     <string name="upload">UPLOAD</string>
     <string name="description">description</string>
     <string name="title_upload_story">Upload Story</string>
     <string name="upload_story">Upload Story</string>
-    <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
-    <string name="empty_description_warning">Harap isi deskripsi terlebih dahulu</string>
+    <string name="empty_image_warning">Please insert the image file first.</string>
+    <string name="empty_description_warning">Please fill in the description first</string>
+    <string name="logout">Logout</string>
+    <string name="language_setting">Language</string>
 
 
 </resources>

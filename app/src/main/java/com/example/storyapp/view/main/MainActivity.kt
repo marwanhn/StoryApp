@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -17,6 +18,7 @@ import com.example.storyapp.adapter.StoryUserAdapter
 import com.example.storyapp.data.retrofit.response.ListStoryItem
 import com.example.storyapp.databinding.ActivityMainBinding
 import com.example.storyapp.utils.ViewModelFactory
+import com.example.storyapp.view.intro.IntroActivity
 import com.example.storyapp.view.upload.UploadStoryActivity
 
 class MainActivity : AppCompatActivity() {
@@ -60,8 +62,13 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewModel() {
         factory = ViewModelFactory.getInstance(this)
 
-        mainViewModel.getSession().observe(this) {
-            getStory(it.token)
+        mainViewModel.getSession().observe(this) { user ->
+            if (!user.isLogin) {
+                startActivity(Intent(this, IntroActivity::class.java))
+                finish()
+            } else {
+                getStory(user.token)
+            }
         }
     }
 
@@ -80,9 +87,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun logoutUser() {
-        mainViewModel.logout()
-    }
+
 
     private fun setupAdapter(listStoryUser: List<ListStoryItem>) {
         storyAdapter = StoryUserAdapter(listStoryUser)
@@ -91,11 +96,15 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun showLoading() {
-        binding.progressBar.visibility = View.VISIBLE
+        mainViewModel.isLoading.observe(this@MainActivity) {
+            binding.progressBar.visibility = View.VISIBLE
+        }
     }
 
     private fun hideLoading() {
-        binding.progressBar.visibility = View.GONE
+        mainViewModel.isLoading.observe(this@MainActivity) {
+            binding.progressBar.visibility = View.GONE
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -104,10 +113,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.action_logout -> {
-                logoutUser()
-                return true
+                mainViewModel.logout()
+                true
+            }
+            R.id.action_language -> {
+                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+                true
             }
             else -> return super.onOptionsItemSelected(item)
         }

@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Item untuk logout -->
     <item
-        android:id="@+id/action_logout"
-        android:title="Logout"
+        android:id="@+id/action_language"
+        android:title="@string/language_setting"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_logout"
+        android:title="@string/logout"
+        app:showAsAction="never" />
+
+
 </menu>

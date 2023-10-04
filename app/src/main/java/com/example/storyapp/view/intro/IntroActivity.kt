@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import com.example.storyapp.R
 import com.example.storyapp.databinding.ActivityIntroBinding
 import com.example.storyapp.view.login.LoginActivity
 import com.example.storyapp.view.register.RegisterActivity

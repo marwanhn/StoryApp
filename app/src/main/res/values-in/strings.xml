@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="sign_up_bar">Daftar</string>
+    <string name="image_contentDescription">Gambar</string>
+    <string name="let_s_get_started_text">Mari kita mulai</string>
+    <string name="intro_text_description">Selamat datang di Aplikasi Cerita Kami! Jelajahi dan nikmati beragam cerita menawan dari berbagai pengguna di sini.</string>
+    <string name="sign_in">MASUK</string>
+    <string name="sign_up">DAFTAR</string>
+    <string name="title_login">Sudah siap untuk berbagi kisah?</string>
+    <string name="message_login">Masukkan data dirimu</string>
+    <string name="name">Nama</string>
+    <string name="message_sign_up">Masukkan data diri Anda!</string>
+    <string name="hint_name">Masukkan nama lengkap anda!</string>
+    <string name="password_error_validation">Kata sandi minimal harus 8 karakter</string>
+    <string name="deskripsi">Deskripsi</string>
+    <string name="take_a_picture">MENGAMBIL GAMBAR</string>
+    <string name="gallery">GALERI</string>
+    <string name="upload">MENGUNGGAH</string>
+    <string name="description">deskripsi</string>
+    <string name="title_upload_story">Unggah Cerita</string>
+    <string name="upload_story">Unggah Cerita</string>
+    <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
+    <string name="empty_description_warning">Harap isi deskripsi terlebih dahulu</string>
+    <string name="logout">Keluar</string>
+    <string name="language_setting">Bahasa</string>
+</resources>

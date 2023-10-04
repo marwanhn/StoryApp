@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="email_error_validation">Invalid email format</string>
+    <string name="email_error_validation" translatable="false">Invalid email format</string>
 </resources>

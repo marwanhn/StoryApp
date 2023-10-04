@@ -98,7 +98,7 @@ class UserRepository private constructor (
         })
     }
 
-    suspend fun getListStory(token: String){
+    fun getListStory(token: String){
         _isLoading.value = true
         val client = apiService.getStories(token)
 

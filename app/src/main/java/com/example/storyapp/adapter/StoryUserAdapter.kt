@@ -8,8 +8,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.example.storyapp.R
 import com.example.storyapp.data.retrofit.response.ListStoryItem
 import com.example.storyapp.databinding.ItemRowStoryBinding
 import com.example.storyapp.view.detail.DetailStoryActivity
