@@ -66,7 +66,7 @@ fun uriToFile(imageUri: Uri, context: Context): File {
     return myFile
 }
 
-@RequiresApi(Build.VERSION_CODES.Q)
+
 fun reduceFileImage(file: File): File {
     val bitmap = BitmapFactory.decodeFile(file.path).getRotatedBitmap(file)
     var compressQuality = 100
@@ -86,7 +86,7 @@ fun reduceFileImage(file: File): File {
     return file
 }
 
-@RequiresApi(Build.VERSION_CODES.Q)
+
 fun Bitmap.getRotatedBitmap(file: File): Bitmap? {
     val orientation = ExifInterface(file).getAttributeInt(
         ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED

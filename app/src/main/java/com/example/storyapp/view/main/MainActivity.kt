@@ -19,6 +19,7 @@ import com.example.storyapp.data.retrofit.response.ListStoryItem
 import com.example.storyapp.databinding.ActivityMainBinding
 import com.example.storyapp.utils.ViewModelFactory
 import com.example.storyapp.view.intro.IntroActivity
+import com.example.storyapp.view.maps.MapsActivity
 import com.example.storyapp.view.upload.UploadStoryActivity
 
 class MainActivity : AppCompatActivity() {
@@ -120,6 +121,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_language -> {
                 startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+                true
+            }
+            R.id.action_map -> {
+                startActivity(Intent(this@MainActivity, MapsActivity::class.java))
                 true
             }
             else -> return super.onOptionsItemSelected(item)

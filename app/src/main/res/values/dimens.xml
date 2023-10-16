@@ -14,7 +14,7 @@
     <dimen name="btn_paddingTopBottom">8dp</dimen>
     <dimen name="intro_screen_sign_up_btn_marginTop">15dp</dimen>
     <dimen name="btn_text_size">18sp</dimen>
-
+    <dimen name="map_padding">32dp</dimen>
 
     <dimen name="sign_in_image_marginTop">42dp</dimen>
 

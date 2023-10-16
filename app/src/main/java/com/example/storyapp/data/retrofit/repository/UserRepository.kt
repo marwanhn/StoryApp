@@ -20,9 +20,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class UserRepository private constructor (
-    private val userPreference: UserPreference,
-    private val apiService: ApiService
+class UserRepository private constructor(
+    private val userPreference: UserPreference, private val apiService: ApiService
 ) {
     private val _registerResponse = MutableLiveData<RegisterResponse>()
     val registerResponse: LiveData<RegisterResponse> = _registerResponse
@@ -53,8 +52,7 @@ class UserRepository private constructor (
 
         client.enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(
-                call: Call<RegisterResponse>,
-                response: Response<RegisterResponse>
+                call: Call<RegisterResponse>, response: Response<RegisterResponse>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful && response.body() != null) {
@@ -72,14 +70,14 @@ class UserRepository private constructor (
             }
         })
     }
+
     fun getLogin(email: String, password: String) {
         _isLoading.value = true
         val client = apiService.login(email, password)
 
         client.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(
-                call: Call<LoginResponse>,
-                response: Response<LoginResponse>
+                call: Call<LoginResponse>, response: Response<LoginResponse>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful && response.body() != null) {
@@ -98,14 +96,13 @@ class UserRepository private constructor (
         })
     }
 
-    fun getListStory(token: String){
+    fun getListStory(token: String) {
         _isLoading.value = true
         val client = apiService.getStories(token)
 
         client.enqueue(object : Callback<StoryResponse> {
             override fun onResponse(
-                call: Call<StoryResponse>,
-                response: Response<StoryResponse>
+                call: Call<StoryResponse>, response: Response<StoryResponse>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful && response.body() != null) {
@@ -120,7 +117,31 @@ class UserRepository private constructor (
             }
 
             override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+                Log.e(TAG, "onFailure: ${t.message.toString()}")
+            }
+        })
+    }
 
+    fun getStoriesWithLocation(token: String) {
+        _isLoading.value = true
+        val client = apiService.getStoriesWithLocation(token)
+
+        client.enqueue(object : Callback<StoryResponse> {
+            override fun onResponse(
+                call: Call<StoryResponse>, response: Response<StoryResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful && response.body() != null) {
+                    _listResponse.value = response.body()
+                } else {
+
+                    Log.e(
+                        TAG,
+                        "onFailure: ${response.message()}, ${response.body()?.message.toString()}"
+                    )
+                }
+            }
+            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
         })
@@ -132,8 +153,7 @@ class UserRepository private constructor (
 
         client.enqueue(object : Callback<UploadStoryResponse> {
             override fun onResponse(
-                call: Call<UploadStoryResponse>,
-                response: Response<UploadStoryResponse>
+                call: Call<UploadStoryResponse>, response: Response<UploadStoryResponse>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful && response.body() != null) {
@@ -151,8 +171,7 @@ class UserRepository private constructor (
                 Log.d("error upload", t.message.toString())
             }
 
-        }
-        )
+        })
     }
 
     suspend fun saveSession(user: UserModel) {
@@ -166,6 +185,7 @@ class UserRepository private constructor (
     suspend fun login() {
         userPreference.login()
     }
+
     suspend fun logout() {
         userPreference.logout()
     }
@@ -176,11 +196,9 @@ class UserRepository private constructor (
         @Volatile
         private var instance: UserRepository? = null
         fun getInstance(
-            userPreference: UserPreference,
-            apiService: ApiService
-        ): UserRepository =
-            instance ?: synchronized(this) {
-                instance ?: UserRepository(userPreference, apiService)
-            }.also { instance = it }
+            userPreference: UserPreference, apiService: ApiService
+        ): UserRepository = instance ?: synchronized(this) {
+            instance ?: UserRepository(userPreference, apiService)
+        }.also { instance = it }
     }
 }

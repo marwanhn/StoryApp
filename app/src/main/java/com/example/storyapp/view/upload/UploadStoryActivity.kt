@@ -3,7 +3,6 @@ package com.example.storyapp.view.upload
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +11,6 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import com.example.storyapp.R
 import com.example.storyapp.databinding.ActivityUploadStoryBinding
 import com.example.storyapp.utils.ViewModelFactory
@@ -33,7 +31,6 @@ class UploadStoryActivity : AppCompatActivity() {
     private lateinit var factory: ViewModelFactory
     private val uploadStoryViewModel: UploadStoryViewModel by viewModels { factory }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -57,7 +54,7 @@ class UploadStoryActivity : AppCompatActivity() {
         factory = ViewModelFactory.getInstance(this)
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
+
     private fun setupAction() {
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.cameraButton.setOnClickListener { startCamera() }
@@ -65,18 +62,16 @@ class UploadStoryActivity : AppCompatActivity() {
     }
 
     private fun startGallery() {
-        launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        launcherGallery.launch("image/*")
     }
 
 
-    private val launcherGallery = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
+    private val launcherGallery = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (uri != null) {
             currentImageUri = uri
             showImage()
         } else {
-            Log.d("Photo Picker", "No media selected")
+            Log.d("File Picker", "No file selected")
         }
     }
 
@@ -101,7 +96,6 @@ class UploadStoryActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     private fun uploadImage() {
         if (currentImageUri != null) {
             val file = uriToFile(currentImageUri!!, this)
