@@ -56,10 +56,10 @@ class StoryUserAdapter:
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val story = getItem(position)
         if (story != null) {
-            viewHolder.bind(story)
+            holder.bind(story)
         }
     }
 

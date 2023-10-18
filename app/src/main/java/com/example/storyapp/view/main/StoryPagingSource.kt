@@ -9,6 +9,7 @@ import com.example.storyapp.data.retrofit.response.ListStoryItem
 import kotlinx.coroutines.flow.first
 
 class StoryPagingSource(
+    private val userPreference: UserPreference,
     private val apiService: ApiService
 ) :
     PagingSource<Int, ListStoryItem>() {
@@ -26,13 +27,26 @@ class StoryPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ListStoryItem> {
         return try {
             val position = params.key ?: INITIAL_PAGE_INDEX
-            val responseData = apiService.getStories(position, params.loadSize)
-            LoadResult.Page(
-                data = responseData.body()?.listStory ?: emptyList(),
-                prevKey = if (position == INITIAL_PAGE_INDEX) null else position - 1,
-                nextKey = if (responseData.body()?.listStory.isNullOrEmpty()) null else position + 1
-            )
+            val token = userPreference.getSession().first().token
+
+            if (token.isNotEmpty()) {
+                val responseData = apiService.getStories(token, position, params.loadSize)
+                if (responseData.isSuccessful) {
+                    Log.d("Story Paging Source", "Load: ${responseData.body()}")
+                    LoadResult.Page(
+                        data = responseData.body()?.listStory ?: emptyList(),
+                        prevKey = if (position == INITIAL_PAGE_INDEX) null else position - 1,
+                        nextKey = if (responseData.body()?.listStory.isNullOrEmpty()) null else position + 1
+                    )
+                } else {
+                    Log.d("Token", "Load Error: $token")
+                    LoadResult.Error(Exception("Failed"))
+                }
+            } else {
+                LoadResult.Error(Exception("Failed"))
+            }
         } catch (e: Exception) {
+            Log.d("Exception", "Load Error: ${e.message}")
             return LoadResult.Error(e)
         }
     }

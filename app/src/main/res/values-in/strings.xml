@@ -24,4 +24,5 @@
     <string name="empty_description_warning">Harap isi deskripsi terlebih dahulu</string>
     <string name="logout">Keluar</string>
     <string name="language_setting">Bahasa</string>
+    <string name="retry">Coba Lagi</string>
 </resources>

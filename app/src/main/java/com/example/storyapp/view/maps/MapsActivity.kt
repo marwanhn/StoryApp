@@ -17,8 +17,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.storyapp.databinding.ActivityMapsBinding
 import com.example.storyapp.utils.ViewModelFactory
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.LatLngBounds
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 

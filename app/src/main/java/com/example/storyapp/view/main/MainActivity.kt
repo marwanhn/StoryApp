@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
@@ -36,16 +35,17 @@ class MainActivity : AppCompatActivity() {
 
         setupView()
         setupViewModel()
+        val layoutManager = LinearLayoutManager(this)
+        binding.rvStories.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
+        binding.rvStories.addItemDecoration(itemDecoration)
         setupAdapter()
         setupAction()
         setupUser()
 
 
 
-        val layoutManager = LinearLayoutManager(this)
-        binding.rvStories.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
-        binding.rvStories.addItemDecoration(itemDecoration)
+
     }
 
     private fun setupView() {
@@ -75,22 +75,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUser() {
-        showLoading()
         mainViewModel.getSession().observe(this) { user ->
             token = user.token
             if (!user.isLogin) {
                 startActivity(Intent(this, IntroActivity::class.java))
                 finish()
             } else {
-                getStory(user.token)
+                getStory()
             }
         }
     }
 
-    private fun getStory(token: String) {
-        mainViewModel.getListStory.observe(this, {
+    private fun getStory() {
+        mainViewModel.getListStory.observe(this) {
             storyAdapter.submitData(lifecycle, it)
-        })
+        }
     }
 
 
@@ -100,27 +99,12 @@ class MainActivity : AppCompatActivity() {
         binding.rvStories.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = storyAdapter.withLoadStateFooter(
-                footer = LoadingStateAdapter {
-                    storyAdapter.retry()
-                }
+                footer = LoadingStateAdapter { storyAdapter.retry() }
             )
         }
+
     }
 
-
-    private fun showLoading() {
-        mainViewModel.isLoading.observe(this@MainActivity) {
-            binding.progressBar.visibility = View.VISIBLE
-        }
-    }
-
-    private fun hideLoading() {
-        mainViewModel.isLoading.observe(this@MainActivity) { isLoading ->
-            if (!isLoading) {
-                binding.progressBar.visibility = View.GONE
-            }
-        }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)

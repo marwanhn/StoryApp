@@ -16,6 +16,7 @@
         tools:text="Timeout" />
 
     <ProgressBar
+        android:indeterminateTint="@color/secondaryColor"
         android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"

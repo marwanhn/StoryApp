@@ -109,30 +109,9 @@ class UserRepository private constructor(
                 pageSize = 5
             ),
             pagingSourceFactory = {
-                StoryPagingSource(apiService)
+                StoryPagingSource(userPreference,apiService)
             }
         ).liveData
-        val client = apiService.getStories()
-
-        client.enqueue(object : Callback<StoryResponse> {
-            override fun onResponse(
-                call: Call<StoryResponse>, response: Response<StoryResponse>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful && response.body() != null) {
-                    _listResponse.value = response.body()
-                } else {
-
-                    Log.e(
-                        TAG,
-                        "onFailure: ${response.message()}, ${response.body()?.message.toString()}"
-                    )
-                }
-            }
-            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
-            }
-        })
     }
 
     fun getStoriesWithLocation(token: String) {
