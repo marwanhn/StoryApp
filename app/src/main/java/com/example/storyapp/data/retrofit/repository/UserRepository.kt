@@ -5,14 +5,20 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.example.storyapp.data.pref.UserModel
 import com.example.storyapp.data.pref.UserPreference
 import com.example.storyapp.data.retrofit.api.ApiService
+import com.example.storyapp.data.retrofit.response.ListStoryItem
 import com.example.storyapp.data.retrofit.response.LoginResponse
 import com.example.storyapp.data.retrofit.response.RegisterResponse
 import com.example.storyapp.data.retrofit.response.StoryResponse
 import com.example.storyapp.data.retrofit.response.UploadStoryResponse
 import com.example.storyapp.utils.EventHandler
+import com.example.storyapp.view.main.StoryPagingSource
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -96,9 +102,17 @@ class UserRepository private constructor(
         })
     }
 
-    fun getListStory(token: String) {
+    fun getListStory(): LiveData<PagingData<ListStoryItem>> {
         _isLoading.value = true
-        val client = apiService.getStories(token)
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                StoryPagingSource(apiService)
+            }
+        ).liveData
+        val client = apiService.getStories()
 
         client.enqueue(object : Callback<StoryResponse> {
             override fun onResponse(
@@ -115,7 +129,6 @@ class UserRepository private constructor(
                     )
                 }
             }
-
             override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }

@@ -121,7 +121,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
                             val latLng = LatLng(list.lat, list.lon)
                             mMap.addMarker(
-                                MarkerOptions().position(latLng).title(list.name)
+                                MarkerOptions().position(latLng).title(list.name).snippet(list.description)
                             )
                         }
                     }

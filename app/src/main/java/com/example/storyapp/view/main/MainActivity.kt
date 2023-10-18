@@ -14,8 +14,8 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.storyapp.R
+import com.example.storyapp.adapter.LoadingStateAdapter
 import com.example.storyapp.adapter.StoryUserAdapter
-import com.example.storyapp.data.retrofit.response.ListStoryItem
 import com.example.storyapp.databinding.ActivityMainBinding
 import com.example.storyapp.utils.ViewModelFactory
 import com.example.storyapp.view.intro.IntroActivity
@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var factory: ViewModelFactory
     private lateinit var storyAdapter: StoryUserAdapter
+    private var token = ""
     private val mainViewModel: MainViewModel by viewModels { factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +36,9 @@ class MainActivity : AppCompatActivity() {
 
         setupView()
         setupViewModel()
+        setupAdapter()
         setupAction()
+        setupUser()
 
 
 
@@ -63,7 +66,18 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewModel() {
         factory = ViewModelFactory.getInstance(this)
 
+    }
+
+    private fun setupAction () {
+        binding.btnUpload.setOnClickListener {
+            startActivity(Intent(this,UploadStoryActivity::class.java))
+        }
+    }
+
+    private fun setupUser() {
+        showLoading()
         mainViewModel.getSession().observe(this) { user ->
+            token = user.token
             if (!user.isLogin) {
                 startActivity(Intent(this, IntroActivity::class.java))
                 finish()
@@ -73,26 +87,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupAction () {
-        binding.btnUpload.setOnClickListener {
-            startActivity(Intent(this,UploadStoryActivity::class.java))
-        }
-    }
-
     private fun getStory(token: String) {
-        showLoading()
-        mainViewModel.getListStory(token)
-        mainViewModel.listStoryUser.observe(this) {
-            setupAdapter(it.listStory)
-            hideLoading()
-        }
+        mainViewModel.getListStory.observe(this, {
+            storyAdapter.submitData(lifecycle, it)
+        })
     }
 
 
 
-    private fun setupAdapter(listStoryUser: List<ListStoryItem>) {
-        storyAdapter = StoryUserAdapter(listStoryUser)
-        binding.rvStories.adapter = storyAdapter
+    private fun setupAdapter() {
+        storyAdapter = StoryUserAdapter()
+        binding.rvStories.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = storyAdapter.withLoadStateFooter(
+                footer = LoadingStateAdapter {
+                    storyAdapter.retry()
+                }
+            )
+        }
     }
 
 
@@ -103,8 +115,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun hideLoading() {
-        mainViewModel.isLoading.observe(this@MainActivity) {
-            binding.progressBar.visibility = View.GONE
+        mainViewModel.isLoading.observe(this@MainActivity) { isLoading ->
+            if (!isLoading) {
+                binding.progressBar.visibility = View.GONE
+            }
         }
     }
 

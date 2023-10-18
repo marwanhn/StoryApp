@@ -33,6 +33,7 @@
     <string name="logout">Logout</string>
     <string name="language_setting">Language</string>
     <string name="title_activity_maps" translatable="false">MapsActivity</string>
+    <string name="retry">Try Again</string>
 
 
 </resources>
