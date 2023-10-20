@@ -2,6 +2,8 @@ package com.example.storyapp.view.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
 import com.example.storyapp.R
 import com.example.storyapp.data.retrofit.response.ListStoryItem
@@ -32,13 +34,23 @@ class DetailStoryActivity : AppCompatActivity() {
     private fun setupDetail() {
         val currentStory = intent.getParcelableExtra<ListStoryItem>(EXTRA_DATA) as ListStoryItem
         binding.apply {
-            Glide.with(this@DetailStoryActivity)
-                .load(currentStory.photoUrl)
-                .fitCenter()
-                .into(ivStory)
+            ivStory.loadImage(url = currentStory.photoUrl)
             tvName.text = currentStory.name
             tvDesc.text = currentStory.description
+        }
+    }
 
+    private fun ImageView.loadImage(url: String?, @DrawableRes placeholderResId: Int = R.drawable.baseline_place_holder) {
+        if (!url.isNullOrBlank()) {
+            Glide.with(this.context)
+                .load(url)
+                .fitCenter()
+                .placeholder(placeholderResId)
+                .error(placeholderResId) // Menetapkan placeholder jika ada kesalahan dalam memuat gambar
+                .into(this)
+        } else {
+            // Handle case where URL is empty or null
+            this.setImageResource(placeholderResId)
         }
     }
 

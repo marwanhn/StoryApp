@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getStory() {
-        mainViewModel.getListStory.observe(this) {
+        mainViewModel.story.observe(this) {
             storyAdapter.submitData(lifecycle, it)
         }
     }
@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }

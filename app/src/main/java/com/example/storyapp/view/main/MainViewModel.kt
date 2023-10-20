@@ -11,7 +11,7 @@ import com.example.storyapp.data.retrofit.response.ListStoryItem
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: UserRepository) : ViewModel() {
-    val getListStory: LiveData<PagingData<ListStoryItem>> =
+    val story: LiveData<PagingData<ListStoryItem>> =
         repository.getListStory().cachedIn(viewModelScope)
 
 

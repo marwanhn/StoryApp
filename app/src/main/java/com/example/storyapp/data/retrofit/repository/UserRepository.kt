@@ -5,10 +5,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
+import com.example.storyapp.data.mediator.StoryRemoteMediator
 import com.example.storyapp.data.pref.UserModel
 import com.example.storyapp.data.pref.UserPreference
 import com.example.storyapp.data.retrofit.api.ApiService
@@ -17,6 +19,7 @@ import com.example.storyapp.data.retrofit.response.LoginResponse
 import com.example.storyapp.data.retrofit.response.RegisterResponse
 import com.example.storyapp.data.retrofit.response.StoryResponse
 import com.example.storyapp.data.retrofit.response.UploadStoryResponse
+import com.example.storyapp.database.StoryDatabase
 import com.example.storyapp.utils.EventHandler
 import com.example.storyapp.view.main.StoryPagingSource
 import okhttp3.MultipartBody
@@ -27,7 +30,7 @@ import retrofit2.Response
 
 
 class UserRepository private constructor(
-    private val userPreference: UserPreference, private val apiService: ApiService
+    private val storyDatabase: StoryDatabase, private val userPreference: UserPreference, private val apiService: ApiService
 ) {
     private val _registerResponse = MutableLiveData<RegisterResponse>()
     val registerResponse: LiveData<RegisterResponse> = _registerResponse
@@ -71,7 +74,7 @@ class UserRepository private constructor(
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                 _isLoading.value = false
-                _customEvent.value = "Terjadi kesalahan saat registrasi"
+                _toastText.value = EventHandler(t.message.toString())
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
@@ -104,12 +107,15 @@ class UserRepository private constructor(
 
     fun getListStory(): LiveData<PagingData<ListStoryItem>> {
         _isLoading.value = true
+        @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
+            remoteMediator = StoryRemoteMediator(storyDatabase, userPreference, apiService),
             pagingSourceFactory = {
-                StoryPagingSource(userPreference,apiService)
+//                StoryPagingSource(userPreference,apiService)
+                storyDatabase.storyDao().getAllStory()
             }
         ).liveData
     }
@@ -134,6 +140,7 @@ class UserRepository private constructor(
                 }
             }
             override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+                _toastText.value = EventHandler(t.message.toString())
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
         })
@@ -160,6 +167,7 @@ class UserRepository private constructor(
             }
 
             override fun onFailure(call: Call<UploadStoryResponse>, t: Throwable) {
+                _toastText.value = EventHandler(t.message.toString())
                 Log.d("error upload", t.message.toString())
             }
 
@@ -188,9 +196,9 @@ class UserRepository private constructor(
         @Volatile
         private var instance: UserRepository? = null
         fun getInstance(
-            userPreference: UserPreference, apiService: ApiService
+            storyDatabase: StoryDatabase, userPreference: UserPreference, apiService: ApiService
         ): UserRepository = instance ?: synchronized(this) {
-            instance ?: UserRepository(userPreference, apiService)
+            instance ?: UserRepository(storyDatabase, userPreference, apiService)
         }.also { instance = it }
     }
 }
