@@ -151,5 +151,10 @@ class RegisterActivity : AppCompatActivity() {
         return nameError || emailError || passwordError
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
+
 
 }

@@ -14,9 +14,9 @@ class UploadStoryViewModel(private val repository: UserRepository) : ViewModel()
     val uploadStoryResponse: LiveData<UploadStoryResponse> = repository.uploadResponse
     val isLoading: LiveData<Boolean> = repository.isLoading
 
-    fun uploadStory(token: String, file: MultipartBody.Part, description: RequestBody) {
+    fun uploadStory(token: String, file: MultipartBody.Part, description: RequestBody, lat: RequestBody, lon: RequestBody) {
         viewModelScope.launch {
-            repository.uploadStory(token, file, description)
+            repository.uploadStory(token, file, description, lat, lon)
         }
     }
 

@@ -10,7 +10,7 @@ import com.example.storyapp.data.retrofit.response.ListStoryItem
 @Dao
 interface StoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertStory(quote: List<ListStoryItem>)
+    fun insertStory(story: List<ListStoryItem>)
 
     @Query("SELECT * FROM story")
     fun getAllStory(): PagingSource<Int, ListStoryItem>

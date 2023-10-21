@@ -9,7 +9,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.DataDummy
-import com.dicoding.myunlimitedquotes.MainDispatcherRule
+import com.MainDispatcherRule
 import com.example.storyapp.adapter.StoryUserAdapter
 import com.example.storyapp.data.retrofit.repository.UserRepository
 import com.example.storyapp.data.retrofit.response.ListStoryItem
@@ -37,7 +37,7 @@ class MainViewModelTest{
 
     @Test
     fun `when Get Story Should Not Null and Return Data`() = runTest {
-        val dummyStory = DataDummy.generateDummyQuoteResponse()
+        val dummyStory = DataDummy.generateDummyStoryResponse()
         val data: PagingData<ListStoryItem> = StoryPagingSource.snapshot(dummyStory)
         val expectedStory = MutableLiveData<PagingData<ListStoryItem>>()
         expectedStory.value = data
@@ -61,19 +61,19 @@ class MainViewModelTest{
     }
 
     @Test
-    fun `when Get Quote Empty Should Return No Data`() = runTest {
+    fun `when Get Story Empty Should Return No Data`() = runTest {
         val data: PagingData<ListStoryItem> = PagingData.from(emptyList())
-        val expectedQuote = MutableLiveData<PagingData<ListStoryItem>>()
-        expectedQuote.value = data
-        Mockito.`when`(userRepository.getListStory()).thenReturn(expectedQuote)
+        val expectedStory = MutableLiveData<PagingData<ListStoryItem>>()
+        expectedStory.value = data
+        Mockito.`when`(userRepository.getListStory()).thenReturn(expectedStory)
         val mainViewModel = MainViewModel(userRepository)
-        val actualQuote: PagingData<ListStoryItem> = mainViewModel.story.getOrAwaitValue()
+        val actualStory: PagingData<ListStoryItem> = mainViewModel.story.getOrAwaitValue()
         val differ = AsyncPagingDataDiffer(
             diffCallback = StoryUserAdapter.DIFF_ITEM_CALLBACK,
             updateCallback = noopListUpdateCallback,
             workerDispatcher = Dispatchers.Main,
         )
-        differ.submitData(actualQuote)
+        differ.submitData(actualStory)
         Assert.assertEquals(0, differ.snapshot().size)
     }
 

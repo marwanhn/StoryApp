@@ -45,8 +45,6 @@ android {
 
 dependencies {
 
-    // ... Dependensi lainnya ...
-
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("com.google.android.material:material:1.5.0")
@@ -55,8 +53,8 @@ dependencies {
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1") // Perbarui versi OkHttp
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0") // Perbarui versi Lifecycle
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
 
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
@@ -75,18 +73,32 @@ dependencies {
 
     // Read EXIF
     implementation("androidx.exifinterface:exifinterface:1.3.6")
-    implementation("com.google.android.gms:play-services-maps:18.0.1") // Perbarui versi Google Maps
+
 
     // Room
     implementation("androidx.room:room-ktx:2.4.2")
     implementation("androidx.room:room-paging:2.4.2")
+    implementation("androidx.test.espresso:espresso-idling-resource:3.5.1")
     kapt("androidx.room:room-compiler:2.4.2")
     implementation("androidx.room:room-runtime:2.4.2")
 
     //Testing
-    testImplementation("androidx.arch.core:core-testing:2.1.0") // InstantTaskExecutorRule
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1") //TestDispatcher
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
     testImplementation("org.mockito:mockito-core:3.12.4")
     testImplementation("org.mockito:mockito-inline:3.12.4")
+
+    //Maps
+    implementation("com.google.android.gms:play-services-maps:18.0.1")
+    implementation("com.google.android.gms:play-services-location:18.0.0")
+
+    //Espresso
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
+    implementation("androidx.test.espresso:espresso-idling-resource:3.4.0'")
+    androidTestImplementation("com.android.support.test.espresso:espresso-contrib:3.0.2")
 
 }

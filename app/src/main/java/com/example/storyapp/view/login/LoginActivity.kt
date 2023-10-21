@@ -12,6 +12,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import com.example.storyapp.R
 import com.example.storyapp.data.pref.UserModel
 import com.example.storyapp.view.main.MainActivity
 import com.example.storyapp.databinding.ActivityLoginBinding
@@ -43,7 +44,10 @@ class LoginActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
-        supportActionBar?.hide()
+        supportActionBar?.apply {
+            title = getString(R.string.sign_in_bar)
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     private fun setupViewModel() {
@@ -178,5 +182,10 @@ class LoginActivity : AppCompatActivity() {
         val passwordError = binding.edtPasswordText.isError
 
         return emailError || passwordError
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 }

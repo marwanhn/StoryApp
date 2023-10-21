@@ -1,4 +1,4 @@
-package com.dicoding.myunlimitedquotes
+package com
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

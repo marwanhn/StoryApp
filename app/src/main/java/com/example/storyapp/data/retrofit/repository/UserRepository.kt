@@ -146,9 +146,9 @@ class UserRepository private constructor(
         })
     }
 
-    fun uploadStory(token: String, photo: MultipartBody.Part, description: RequestBody) {
+    fun uploadStory(token: String, photo: MultipartBody.Part, description: RequestBody, lat: RequestBody, lon: RequestBody) {
         _isLoading.value = true
-        val client = apiService.uploadImage(token, photo, description)
+        val client = apiService.uploadImage(token, photo, description, lat, lon)
 
         client.enqueue(object : Callback<UploadStoryResponse> {
             override fun onResponse(
